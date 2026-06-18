@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { VerificationResponse } from "../types/apiResponses";
 
-const API_URL = "http://localhost:5001/api/verify";
+const API_URL = "http://localhost:5005/api/verify";
 
 export const verifyCredential = async (
   id: string,
