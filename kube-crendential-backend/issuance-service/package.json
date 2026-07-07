@@ -1,13 +1,13 @@
-  {
+{
     "name": "issuance-service",
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-      "test": "jest --coverage",
-      "test:unit": "jest src/test/credentialModel.test.ts",
-      "test:integration": "jest src/test/issuanceController.test.ts",
-      "start": "ts-node src/index.ts",
-      "dev": "nodemon src/index.ts"
+        "test": "jest --coverage",
+        "test:unit": "jest src/test/credentialModel.test.ts",
+        "test:integration": "jest src/test/issuanceController.test.ts",
+        "start": "ts-node src/index.ts",
+        "dev": "nodemon src/index.ts"
     },
     "keywords": [],
     "author": "",
@@ -15,22 +15,24 @@
     "type": "commonjs",
     "description": "",
     "dependencies": {
-      "body-parser": "^2.2.0",
-      "cors": "^2.8.5",
-      "express": "^5.1.0"
+        "body-parser": "^2.2.0",
+        "cors": "^2.8.5",
+        "dotenv": "^17.4.2",
+        "express": "^5.1.0",
+        "mongoose": "^9.7.3"
     },
     "devDependencies": {
-      "@types/body-parser": "^1.19.6",
-      "@types/cors": "^2.8.19",
-      "@types/express": "^5.0.3",
-      "@types/jest": "^30.0.0",
-      "@types/node": "^24.7.0",
-      "@types/supertest": "^6.0.3",
-      "jest": "^30.2.0",
-      "nodemon": "^3.1.10",
-      "supertest": "^7.1.4",
-      "ts-jest": "^29.4.4",
-      "ts-node": "^10.9.2",
-      "typescript": "^5.9.3"
+        "@types/body-parser": "^1.19.6",
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/jest": "^30.0.0",
+        "@types/node": "^24.7.0",
+        "@types/supertest": "^6.0.3",
+        "jest": "^30.2.0",
+        "nodemon": "^3.1.10",
+        "supertest": "^7.1.4",
+        "ts-jest": "^29.4.4",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
     }
-  }
+}
