@@ -5,5 +5,6 @@ export type Credential = {
   worker?: string;
   timestamp?: string;
   verified?: boolean;
+  verifiedBy?: string;
   verifiedAt?: string;
 };
