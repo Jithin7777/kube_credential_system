@@ -1,41 +1,52 @@
 import { Request, Response } from "express";
-import { getAllCredentials, saveCredential } from "../models/credentialModel";
 import { Credential } from "../types/credentialTypes";
 import { randomUUID } from "crypto";
+import CredentialModel from "../models/Credential";
+
 const WORKER_ID = process.env.WORKER_ID || "worker-1";
 
-export function issueCredential(req: Request, res: Response) {
-  const { name, email } = req.body as { name: string; email: string };
+export async function issueCredential(req: Request, res: Response) {
+  try {
+    const { name, email } = req.body as {
+      name: string;
+      email: string;
+    };
 
-  if (!name || !email) {
-    return res.status(400).json({ message: "name and email required" });
-  }
+    if (!name || !email) {
+      return res.status(400).json({
+        message: "name and email required",
+      });
+    }
 
-  const all = getAllCredentials();
+    const exists = await CredentialModel.findOne({ email });
 
-  const exists = all.find((c) => c.email === email);
+    if (exists) {
+      return res.status(409).json({
+        message: "Credential already exists",
+        credential: exists,
+      });
+    }
 
-  if (exists) {
-    return res.status(409).json({
-      message: "Credential already exists",
-      credential: exists,
+    const credential: Credential = {
+      id: randomUUID(),
+      name,
+      email,
+      worker: WORKER_ID,
+      timestamp: new Date().toISOString(),
+      verified: false,
+    };
+
+    await CredentialModel.create(credential);
+
+    return res.status(200).json({
+      message: `credential issued by ${WORKER_ID}`,
+      credential,
+    });
+  } catch (error) {
+    console.error("Error issuing credential:", error);
+
+    return res.status(500).json({
+      message: "Internal Server Error",
     });
   }
-
-  const id = randomUUID();
-
-  const credential: Credential = {
-    name,
-    email,
-    id,
-    worker: WORKER_ID,
-    timestamp: new Date().toISOString(),
-  };
-
-  saveCredential(credential);
-
-  res.status(200).json({
-    message: `credential issued by ${WORKER_ID}`,
-    credential,
-  });
 }
