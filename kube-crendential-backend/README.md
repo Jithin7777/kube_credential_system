@@ -11,8 +11,7 @@ The backend consists of **two independent microservices**:
 1. **Issuance Service** – Creates and stores credentials.  
 2. **Verification Service** – Validates credentials and returns worker ID and timestamp.
 
-Each service is **containerized using Docker**, runs independently, and can scale separately.  
-The services communicate via a shared JSON file (`shared-data/credentials.json`) for simplicity.  
+Each service is **containerized using Docker**, runs independently, and connects to the same MongoDB Atlas database..  
 
 ---
 
@@ -22,10 +21,11 @@ The services communicate via a shared JSON file (`shared-data/credentials.json`)
 - Separation of concerns: Issuance and Verification are independent workflows.
 - Benefit: Easier to deploy, test, scale, and maintain.
 
-### Storage
-- **Current:** JSON file (`shared-data/credentials.json`) for simple persistence.
-- **Reason:** Avoids external DB setup for free-tier cloud deployment.
-- **Future Improvement:** Switch to a database like MongoDB or PostgreSQL.
+### Database
+
+- **Current:** MongoDB Atlas
+- **ODM:** Mongoose
+- Both services connect to the same MongoDB database while remaining independent.
 
 ### Worker 
 - Each service returns a simulated worker ID for requests.
@@ -38,53 +38,75 @@ The services communicate via a shared JSON file (`shared-data/credentials.json`)
 ##  Folder Structure
 ```javascript
 kube-credential-backend/
-├─ issuance-service/
-│ ├─ shared-data/
-│ │ └─ credentials.json
-│ ├─ src/
-│ │ ├─ controllers/
-│ │ │ └─ issuanceController.ts
-│ │ ├─ models/
-│ │ │ └─ credentialModel.ts
-│ │ ├─ routes/
-│ │ │ └─ issuanceRoutes.ts
-│ │ ├─ test/
-│ │ │ ├─ credentialModel.test.ts
-│ │ │ └─ issuanceController.test.ts
-│ │ ├─ types/
-│ │ ├─ app.ts
-│ │ └─ index.ts
-│ ├─ .dockerignore
-│ ├─ .gitignore
-│ ├─ Dockerfile
-│ ├─ jest.config.js
-│ ├─ package-lock.json
-│ ├─ package.json
-│ └─ tsconfig.json
-├─ verification-service/
-│ ├─ src/
-│ │ ├─ controllers/
-│ │ │ └─ verificationController.ts
-│ │ ├─ models/
-│ │ │ └─ verificationModel.ts
-│ │ ├─ routes/
-│ │ │ └─ verificationRoutes.ts
-│ │ ├─ tests/
-│ │ │ └─ verificationModel.test.ts
-│ │ ├─ types/
-│ │ │ └─ verificationTypes.ts
-│ │ ├─ app.ts
-│ │ └─ index.ts
-│ ├─ .dockerignore
-│ ├─ .gitignore
-│ ├─ Dockerfile
-│ ├─ jest.config.js
-│ ├─ package-lock.json
-│ ├─ package.json
-│ └─ tsconfig.json
-├─ README.md
-└─ docker-compose.yml
+├── issuance-service/
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── database.ts
+│   │   ├── controllers/
+│   │   │   └── issuanceController.ts
+│   │   ├── models/
+│   │   │   └── Credential.ts
+│   │   ├── routes/
+│   │   │   └── issuanceRoutes.ts
+│   │   ├── test/
+│   │   │   ├── credentialModel.test.ts
+│   │   │   └── issuanceController.test.ts
+│   │   ├── types/
+│   │   │   └── credentialTypes.ts
+│   │   ├── app.ts
+│   │   └── index.ts
+│   ├── .env
+│   ├── .dockerignore
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── jest.config.js
+│   ├── package-lock.json
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── verification-service/
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── database.ts
+│   │   ├── controllers/
+│   │   │   └── verificationController.ts
+│   │   ├── models/
+│   │   │   └── Credential.ts
+│   │   ├── routes/
+│   │   │   └── verificationRoutes.ts
+│   │   ├── tests/
+│   │   │   └── verificationModel.test.ts
+│   │   ├── types/
+│   │   │   └── verificationTypes.ts
+│   │   ├── app.ts
+│   │   └── index.ts
+│   ├── .env
+│   ├── .dockerignore
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── jest.config.js
+│   ├── package-lock.json
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── README.md
+└── docker-compose.yml
+```
 
+## Environment Variables
+
+Create a `.env` file inside **both** services.
+
+Example:
+
+```
+MONGODB_URI=your_mongodb_atlas_connection_string
+```
+
+The verification service only requires:
+
+```
+MONGODB_URI=your_mongodb_atlas_connection_string
 ```
 
 
