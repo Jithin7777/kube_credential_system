@@ -1,9 +1,6 @@
 # Kube Credential Frontend
 ---
-## Submitted by
-**Name:** Jithin Jose  
-**Email:** jithinjose887@gmail.com  
-**Contact:** +91 9446283405  
+
 
 
 
