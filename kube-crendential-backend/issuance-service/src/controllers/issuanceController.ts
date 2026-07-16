@@ -7,16 +7,7 @@ const WORKER_ID = process.env.WORKER_ID || "worker-1";
 
 export async function issueCredential(req: Request, res: Response) {
   try {
-    const { name, email } = req.body as {
-      name: string;
-      email: string;
-    };
-
-    if (!name || !email) {
-      return res.status(400).json({
-        message: "name and email required",
-      });
-    }
+    const { name, email, worker } = req.body;
 
     const exists = await CredentialModel.findOne({ email });
 
@@ -42,6 +33,7 @@ export async function issueCredential(req: Request, res: Response) {
       message: `credential issued by ${WORKER_ID}`,
       credential,
     });
+
   } catch (error) {
     console.error("Error issuing credential:", error);
 

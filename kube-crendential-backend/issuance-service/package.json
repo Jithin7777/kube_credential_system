@@ -19,7 +19,8 @@
         "cors": "^2.8.5",
         "dotenv": "^17.4.2",
         "express": "^5.1.0",
-        "mongoose": "^9.7.3"
+        "mongoose": "^9.7.3",
+        "zod": "^4.4.3"
     },
     "devDependencies": {
         "@types/body-parser": "^1.19.6",
