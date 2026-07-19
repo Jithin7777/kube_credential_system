@@ -5,21 +5,7 @@ const WORKER_ID = process.env.WORKER_ID || "worker-1";
 
 export async function verifyCredential(req: Request, res: Response) {
   try {
-    const { id, email } = req.body as { id: string; email: string };
-
-    if (!id || !email) {
-      return res.status(400).json({
-        verified: false,
-        message: "id and email are required",
-        credential: {
-          id: id || "",
-          email: email || "",
-          verified: false,
-          verifiedBy: "N/A",
-          verifiedAt: null,
-        },
-      });
-    }
+    const { id, email } = req.body;
 
     const credential = await CredentialModel.findOne({ id, email });
 
@@ -56,6 +42,7 @@ export async function verifyCredential(req: Request, res: Response) {
       message: "Credential verified successfully",
       credential,
     });
+
   } catch (error) {
     console.error("Error verifying credential:", error);
 
