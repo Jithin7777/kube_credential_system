@@ -61,6 +61,7 @@ kube_credential_system/
 - Mongoose
 - Docker
 - Docker Compose
+- Zod
 - Jest
 
 ---
