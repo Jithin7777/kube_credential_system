@@ -1,21 +1,24 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Credential } from "../types/credentialTypes";
 import { randomUUID } from "crypto";
 import CredentialModel from "../models/Credential";
+import AppError from "../errors/AppError";
 
 const WORKER_ID = process.env.WORKER_ID || "worker-1";
 
-export async function issueCredential(req: Request, res: Response) {
+export async function issueCredential(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  console.log("issueCredential controller called");
   try {
-    const { name, email, worker } = req.body;
+    const { name, email} = req.body;
 
     const exists = await CredentialModel.findOne({ email });
 
     if (exists) {
-      return res.status(409).json({
-        message: "Credential already exists",
-        credential: exists,
-      });
+      throw new AppError("Credential already exists", 409);
     }
 
     const credential: Credential = {
@@ -33,12 +36,7 @@ export async function issueCredential(req: Request, res: Response) {
       message: `credential issued by ${WORKER_ID}`,
       credential,
     });
-
   } catch (error) {
-    console.error("Error issuing credential:", error);
-
-    return res.status(500).json({
-      message: "Internal Server Error",
-    });
+    next(error);
   }
 }
