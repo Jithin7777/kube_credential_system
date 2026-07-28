@@ -3,6 +3,7 @@ import { Credential } from "../types/credentialTypes";
 import { randomUUID } from "crypto";
 import CredentialModel from "../models/Credential";
 import AppError from "../errors/AppError";
+import logger from "../logger/logger";
 
 const WORKER_ID = process.env.WORKER_ID || "worker-1";
 
@@ -11,13 +12,15 @@ export async function issueCredential(
   res: Response,
   next: NextFunction,
 ) {
-  console.log("issueCredential controller called");
+  logger.info("Issue credential request received");
+
   try {
-    const { name, email} = req.body;
+    const { name, email } = req.body;
 
     const exists = await CredentialModel.findOne({ email });
 
     if (exists) {
+      logger.warn({ email }, "Duplicate credential request");
       throw new AppError("Credential already exists", 409);
     }
 
@@ -31,6 +34,15 @@ export async function issueCredential(
     };
 
     await CredentialModel.create(credential);
+
+    logger.info(
+      {
+        id: credential.id,
+        email: credential.email,
+        worker: WORKER_ID,
+      },
+      "Credential issued successfully"
+    );
 
     return res.status(200).json({
       message: `credential issued by ${WORKER_ID}`,
