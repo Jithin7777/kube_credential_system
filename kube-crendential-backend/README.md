@@ -37,60 +37,51 @@ Each service is **containerized using Docker**, runs independently, and connects
 
 ##  Folder Structure
 ```javascript
-kube-credential-backend/
+kube-crendential-backend/
 ├── issuance-service/
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── database.ts
 │   │   ├── controllers/
-│   │   │   └── issuanceController.ts
+│   │   ├── errors/
+│   │   ├── logger/
+│   │   ├── middlewares/
 │   │   ├── models/
-│   │   │   └── Credential.ts
 │   │   ├── routes/
-│   │   │   └── issuanceRoutes.ts
 │   │   ├── test/
-│   │   │   ├── credentialModel.test.ts
-│   │   │   └── issuanceController.test.ts
 │   │   ├── types/
-│   │   │   └── credentialTypes.ts
+│   │   ├── validators/
 │   │   ├── app.ts
 │   │   └── index.ts
-│   ├── .env
 │   ├── .dockerignore
 │   ├── .gitignore
 │   ├── Dockerfile
 │   ├── jest.config.js
-│   ├── package-lock.json
 │   ├── package.json
+│   ├── package-lock.json
 │   └── tsconfig.json
-│
 ├── verification-service/
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── database.ts
 │   │   ├── controllers/
-│   │   │   └── verificationController.ts
+│   │   ├── errors/
+│   │   ├── logger/
+│   │   ├── middlewares/
 │   │   ├── models/
-│   │   │   └── Credential.ts
 │   │   ├── routes/
-│   │   │   └── verificationRoutes.ts
 │   │   ├── tests/
-│   │   │   └── verificationModel.test.ts
 │   │   ├── types/
-│   │   │   └── verificationTypes.ts
+│   │   ├── validators/
 │   │   ├── app.ts
 │   │   └── index.ts
-│   ├── .env
 │   ├── .dockerignore
 │   ├── .gitignore
 │   ├── Dockerfile
 │   ├── jest.config.js
-│   ├── package-lock.json
 │   ├── package.json
+│   ├── package-lock.json
 │   └── tsconfig.json
-│
-├── README.md
-└── docker-compose.yml
+├── docker-compose.yml
+└── README.md
 ```
 
 ## Environment Variables
