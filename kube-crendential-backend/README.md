@@ -35,6 +35,19 @@ Each service is **containerized using Docker**, runs independently, and connects
 - Enforces type safety across services.
 - Reduces runtime errors and improves maintainability.
 
+### Request Validation
+
+- Request validation is implemented using **Zod**.
+- Incoming API requests are validated before reaching controllers.
+- Invalid requests return structured validation errors.
+
+### Error Handling
+
+- Centralized error handling middleware is used across both microservices.
+- Custom error classes are used to handle application-specific errors.
+- All errors return a consistent API response format.
+
+
 ##  Folder Structure
 ```javascript
 kube-crendential-backend/
