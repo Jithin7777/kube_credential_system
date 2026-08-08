@@ -4,6 +4,7 @@ import helmet from "helmet";
 
 import issuanceRoutes from "./routes/issuanceRoutes";
 import { errorHandler } from "./middlewares/errorHandler";
+import { rateLimiter } from "./middlewares/rateLimiter";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use(rateLimiter);
 app.use(express.json());
 
 app.use("/", issuanceRoutes);

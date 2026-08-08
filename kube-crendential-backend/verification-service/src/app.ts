@@ -4,10 +4,12 @@ import helmet from "helmet";
 
 import verificationRoutes from "./routes/verificationRoutes";
 import { errorHandler } from "./middlewares/errorHandler";
+import { rateLimiter } from "./middlewares/rateLimiter";
 
 const app = express();
 
 app.use(helmet());
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -15,6 +17,9 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(rateLimiter);
+
 app.use(express.json());
 
 app.use("/api", verificationRoutes);
