@@ -2,12 +2,18 @@ import { z } from "zod";
 
 export const verificationSchema = z.object({
   id: z
-    .string()
+    .string({
+      error: "Credential ID is required",
+    })
     .trim()
-    .min(1, { error: "Credential ID is required" }),
+    .uuid({
+      error: "Please provide a valid credential ID",
+    }),
 
   email: z
     .string()
     .trim()
-    .email({ error: "Please provide a valid email address" }),
+    .email({
+      error: "Please provide a valid email address",
+    }),
 });
