@@ -8,6 +8,12 @@ export const credentialSchema = z.object({
     .trim()
     .min(2, {
       error: "Name must be at least 2 characters long",
+    })
+    .max(100, {
+      error: "Name must not exceed 100 characters",
+    })
+    .regex(/^[\p{L}][\p{L}\s.'-]*$/u, {
+      error: "Name contains invalid characters",
     }),
 
   email: z

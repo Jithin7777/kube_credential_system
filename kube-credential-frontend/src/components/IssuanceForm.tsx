@@ -21,6 +21,9 @@ const IssuanceForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [messageType, setMessageType] = useState<
+    "success" | "error" | "warning" | null
+  >(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -37,6 +40,7 @@ const IssuanceForm = () => {
       }
 
       setMessage(message);
+      setMessageType("success");
       setName("");
       setEmail("");
     } catch (err: unknown) {
@@ -45,8 +49,14 @@ const IssuanceForm = () => {
         if (err.response?.status === 409 && data?.credential) {
           // setLastIssued(data.credential);
           setMessage(data.message || "A credential already exists.");
+          setMessageType("warning");
         } else {
-          setMessage(data?.message || "Failed to issue credential");
+          setMessage(
+            data?.errors?.[0]?.message ||
+              data?.message ||
+              "Failed to issue credential",
+          );
+          setMessageType("error");
         }
       } else if (err instanceof Error) {
         setMessage(err.message);
@@ -153,15 +163,16 @@ const IssuanceForm = () => {
         {message && (
           <div
             className={`p-4 rounded-xl border-2 ${
-              message.includes("Failed")
+              messageType === "error"
                 ? "bg-red-50 border-red-200"
-                : message.includes("exists")
-                ? "bg-yellow-50 border-yellow-200"
-                : "bg-green-50 border-green-200"
+                : messageType === "warning"
+                  ? "bg-yellow-50 border-yellow-200"
+                  : "bg-green-50 border-green-200"
             }`}
           >
+            {" "}
             <div className="flex items-center gap-3">
-              {message.includes("Failed") ? (
+              {messageType === "error" ? (
                 <div className="h-5 w-5 text-red-600 flex-shrink-0">⚠️</div>
               ) : message.includes("exists") ? (
                 <AlertTriangle className="h-5 w-5 text-yellow-500 flex-shrink-0" />
@@ -171,11 +182,11 @@ const IssuanceForm = () => {
 
               <p
                 className={`font-medium ${
-                  message.includes("Failed")
+                  messageType === "error"
                     ? "text-red-800"
                     : message.includes("exists")
-                    ? "text-yellow-700"
-                    : "text-green-800"
+                      ? "text-yellow-700"
+                      : "text-green-800"
                 }`}
               >
                 {message}
