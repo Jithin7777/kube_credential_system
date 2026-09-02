@@ -1,15 +1,13 @@
-import "dotenv/config";
 import app from "./app";
 import { connectDB } from "./config/database";
 import logger from "./logger/logger";
-
-const PORT = process.env.PORT || 5001;
+import { env } from "./config/env";
 
 const startServer = async () => {
   await connectDB();
 
-  app.listen(PORT, () => {
-    logger.info(`Verification service running on port ${PORT}`);
+  app.listen(env.PORT, () => {
+    logger.info(`Verification service running on port ${env.PORT}`);
   });
 };
 
